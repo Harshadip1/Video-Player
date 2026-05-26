@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <div class="profile-header reveal">
+          <img src="https://i.pravatar.cc/150?u=nexusviewer" alt="" class="profile-avatar">
+          <div>
+            <h1>Viewer Profile</h1>
+            <p style="color:var(--text-secondary)">Premium Member · Joined 2024 · 127 videos watched</p>
+            <div style="display:flex;gap:0.5rem;margin-top:1rem">
+              <span class="badge-pill">4K</span>
+              <span class="badge-pill">Offline</span>
+              <span class="badge-pill">Dolby Atmos</span>
+            </div>
+          </div>
+        </div>
+        <div id="profileStats"></div>
+        <h2 class="section-title">Watch Activity</h2>
+        <div class="timeline" id="profileActivity"></div>
+        <h2 class="section-title">Favorite Genres</h2>
+        <div id="profileGenres" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem"></div>
+        <div id="profileVideos"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('profileStats').innerHTML = NexusApp.renderStats([
+        { value: '127', label: 'Watched' }, { value: '24', label: 'Favorites' },
+        { value: '48', label: 'Playlists' }, { value: '34h', label: 'Watch Time' }
+      ]);
+      document.getElementById('profileActivity').innerHTML = NexusData.history.slice(0, 8).map(h => {
+        const v = NexusData.getVideo(h.videoId);
+        return v ? `<div class="timeline-item"><strong>${v.title}</strong><p class="video-meta">${h.sessionMinutes} min on ${h.device}</p></div>` : '';
+      }).join('');
+      document.getElementById('profileGenres').innerHTML = NexusData.genres.slice(0, 8).map(g => `<span class="chip">${g}</span>`).join('');
+      document.getElementById('profileVideos').innerHTML = NexusApp.renderVideoGrid(NexusApp.resolveVideos(NexusApp.getFavorites()).slice(0, 12));
+    });
+  </script>
+</body>
+</html>

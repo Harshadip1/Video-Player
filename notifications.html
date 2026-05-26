@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <div class="section-header">
+          <div><h1 class="page-title">Notifications</h1><p class="page-subtitle">85 activity updates</p></div>
+          <button class="btn btn-outline btn-sm" onclick="NexusNotifications.toast('All marked read','✓')">Mark all read</button>
+        </div>
+        <div class="glass-card" id="notificationList"></div>
+        <h2 class="section-title" style="margin-top:2rem">Activity Timeline</h2>
+        <div class="timeline" id="activityTimeline"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      NexusNotifications.renderList(NexusData.notifications, 'notificationList');
+      document.getElementById('activityTimeline').innerHTML = NexusData.notifications.slice(0, 15).map(n => `
+        <div class="timeline-item"><strong>${n.title}</strong><p class="video-meta">${n.msg} · ${n.time}</p></div>`).join('');
+    });
+  </script>
+</body>
+</html>

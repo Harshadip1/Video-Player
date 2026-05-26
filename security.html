@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Center — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">🔒 Security Center</h1>
+        <p class="page-subtitle">Account protection and privacy controls</p>
+        <div id="secStats"></div>
+        <div class="glass-card" style="margin-bottom:1rem">
+          <h3>Two-Factor Authentication</h3>
+          <p style="color:var(--text-secondary);margin:0.5rem 0">Add an extra layer of security to your account.</p>
+          <button class="btn btn-primary btn-sm" onclick="NexusNotifications.toast('2FA setup started','🔐')">Enable 2FA</button>
+        </div>
+        <div class="glass-card" style="margin-bottom:1rem">
+          <h3>Active Sessions</h3>
+          <table class="data-table"><thead><tr><th>Device</th><th>Location</th><th>Last active</th></tr></thead>
+          <tbody>
+            <tr><td>Desktop · Chrome</td><td>Region A</td><td>Now</td></tr>
+            <tr><td>Mobile · App</td><td>Region B</td><td>2h ago</td></tr>
+            <tr><td>Smart TV</td><td>Home Network</td><td>Yesterday</td></tr>
+          </tbody></table>
+        </div>
+        <div class="glass-card">
+          <h3>Privacy Settings</h3>
+          <div class="form-group"><label><input type="checkbox" checked> Private watch history</label></div>
+          <div class="form-group"><label><input type="checkbox"> Hide activity from recommendations</label></div>
+          <div class="form-group"><label><input type="checkbox" checked> Secure offline downloads</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('secStats').innerHTML = NexusApp.renderStats([
+        { value: 'Strong', label: 'Password' }, { value: 'On', label: '2FA Ready' },
+        { value: '3', label: 'Sessions' }, { value: '0', label: 'Alerts' }
+      ]);
+    });
+  </script>
+</body>
+</html>

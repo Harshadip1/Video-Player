@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloads — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">Downloads</h1>
+        <p class="page-subtitle">Offline media manager · 35 items</p>
+        <div id="dlStats"></div>
+        <div class="glass-card" style="margin-bottom:1.5rem">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem"><span>Storage Used</span><span>42.8 GB / 128 GB</span></div>
+          <div class="progress-track"><span style="width:33%"></span></div>
+        </div>
+        <h2 class="section-title">Active Downloads</h2>
+        <div id="activeDownloads"></div>
+        <h2 class="section-title" style="margin-top:2rem">Completed</h2>
+        <div id="completedDownloads"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('dlStats').innerHTML = NexusApp.renderStats([
+        { value: '35', label: 'Total Items' },
+        { value: '5', label: 'In Progress' },
+        { value: '30', label: 'Completed' },
+        { value: '42.8GB', label: 'Storage' }
+      ]);
+      const active = NexusData.downloads.filter(d => d.status === 'downloading');
+      const done = NexusData.downloads.filter(d => d.status === 'completed');
+      document.getElementById('activeDownloads').innerHTML = active.map(d => `
+        <div class="download-item">
+          <img src="${NexusData.getVideo(d.videoId)?.thumbnail}" alt="" style="width:120px;border-radius:8px">
+          <div style="flex:1"><strong>${d.title}</strong><p class="video-meta">${d.quality} · ${d.size}</p>
+          <div class="download-progress"><span style="width:${d.progress}%"></span></div></div>
+          <span>${d.progress}%</span>
+        </div>`).join('');
+      document.getElementById('completedDownloads').innerHTML = done.map(d => `
+        <div class="download-item">
+          <img src="${NexusData.getVideo(d.videoId)?.thumbnail}" alt="" style="width:80px;border-radius:8px">
+          <div style="flex:1"><strong>${d.title}</strong><p class="video-meta">${d.quality} · ${d.size} · ${d.started}</p></div>
+          <a href="player.html?id=${d.videoId}" class="btn btn-sm btn-primary">Play</a>
+        </div>`).join('');
+    });
+  </script>
+</body>
+</html>

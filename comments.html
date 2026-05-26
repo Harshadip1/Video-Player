@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comments & Reviews — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">Comments & Reviews</h1>
+        <p class="page-subtitle">280 discussions across the platform</p>
+        <div id="commentStats"></div>
+        <div class="glass-card" style="margin-bottom:1.5rem">
+          <h3>Add a comment</h3>
+          <textarea class="form-control" rows="3" placeholder="Share your thoughts..." style="margin:0.75rem 0"></textarea>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <span>Rating:</span>
+            <span>★★★★☆</span>
+            <button class="btn btn-primary btn-sm" onclick="NexusNotifications.toast('Comment posted','💬')">Post</button>
+          </div>
+        </div>
+        <div id="commentsList"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('commentStats').innerHTML = NexusApp.renderStats([
+        { value: '280', label: 'Comments' }, { value: '4.6', label: 'Avg Rating' },
+        { value: '1.2K', label: 'Replies' }, { value: '89%', label: 'Positive' }
+      ]);
+      document.getElementById('commentsList').innerHTML = NexusData.comments.map(c => {
+        const v = NexusData.getVideo(c.videoId);
+        return `<div class="comment-card glass-card">
+          <img src="${c.avatar}" alt="" class="comment-avatar">
+          <div class="comment-body">
+            <strong>${c.user}</strong> <span class="video-meta">on ${v?.title || 'Video'} · ${c.timestamp}</span>
+            <p style="margin:0.5rem 0">${c.text}</p>
+            <div class="comment-actions">👍 ${c.likes} · 👎 ${c.dislikes} · ★ ${c.rating}/5 · 💬 ${c.replies} replies</div>
+          </div>
+        </div>`;
+      }).join('');
+    });
+  </script>
+</body>
+</html>

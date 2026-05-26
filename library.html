@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">Video Library</h1>
+        <p class="page-subtitle">320 titles · Movies, series, shorts, and audio</p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem" id="genreChips"></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+          <select id="libSort" class="form-control" style="width:auto"><option value="views">Popularity</option><option value="newest">Newest</option><option value="rating">Rating</option><option value="title">A-Z</option></select>
+          <input type="search" id="libSearch" class="form-control" placeholder="Filter library..." style="max-width:300px">
+        </div>
+        <div id="libraryGrid"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/search.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let filtered = [...NexusData.videos];
+      const chips = document.getElementById('genreChips');
+      chips.innerHTML = '<span class="chip active" data-genre="">All</span>' + NexusData.genres.map(g => `<span class="chip" data-genre="${g}">${g}</span>`).join('');
+      const render = () => {
+        document.getElementById('libraryGrid').innerHTML = NexusApp.renderVideoGrid(filtered);
+      };
+      chips.addEventListener('click', e => {
+        if (!e.target.classList.contains('chip')) return;
+        chips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        const g = e.target.dataset.genre;
+        filtered = g ? NexusData.videos.filter(v => v.genre === g) : [...NexusData.videos];
+        render();
+      });
+      document.getElementById('libSort').addEventListener('change', e => {
+        filtered = NexusSearch.filter(filtered, { sort: e.target.value });
+        render();
+      });
+      document.getElementById('libSearch').addEventListener('input', e => {
+        filtered = NexusSearch.search(e.target.value, filtered.length === NexusData.videos.length ? NexusData.videos : filtered);
+        render();
+      });
+      render();
+    });
+  </script>
+</body>
+</html>

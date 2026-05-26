@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">Categories</h1>
+        <p class="page-subtitle">Browse by genre — 20 categories</p>
+        <div class="category-grid" id="catGrid"></div>
+        <h2 class="section-title" style="margin-top:2rem" id="catTitle">All Videos</h2>
+        <div id="catVideos"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(location.search);
+      const genre = params.get('genre');
+      document.getElementById('catGrid').innerHTML = NexusData.categories.map(c => `
+        <a href="categories.html?genre=${encodeURIComponent(c.name)}" class="category-card">
+          <img src="${c.thumbnail}" alt="" loading="lazy"><span>${c.name} (${c.count})</span>
+        </a>`).join('');
+      const filtered = genre ? NexusData.videos.filter(v => v.genre === genre) : NexusData.videos;
+      if (genre) document.getElementById('catTitle').textContent = genre + ' (' + filtered.length + ')';
+      document.getElementById('catVideos').innerHTML = NexusApp.renderVideoGrid(filtered);
+    });
+  </script>
+</body>
+</html>

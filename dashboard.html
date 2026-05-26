@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <div class="dashboard-hero reveal">
+          <div>
+            <h2>Welcome back, Viewer</h2>
+            <p style="color:var(--text-secondary)">Pick up where you left off or discover something new.</p>
+            <a href="continue-watching.html" class="btn btn-primary" style="margin-top:1rem">Continue Watching →</a>
+          </div>
+          <div id="dashStats"></div>
+        </div>
+        <div id="continueSection"></div>
+        <div id="carouselTrending"></div>
+        <div id="carouselFavorites"></div>
+        <div id="carouselPlaylists"></div>
+        <h2 class="section-title reveal">Recently Added</h2>
+        <div id="recentGrid" class="reveal"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('dashStats').innerHTML = NexusApp.renderStats([
+        { value: '127', label: 'Videos Watched' },
+        { value: '34h', label: 'This Month' },
+        { value: '24', label: 'Favorites' },
+        { value: '12', label: 'Downloads' }
+      ]);
+      const cont = NexusData.videos.filter(v => v.progress > 0).slice(0, 5);
+      document.getElementById('continueSection').innerHTML = '<h2 class="section-title">Continue Watching</h2>' + cont.map(v => `
+        <a href="player.html?id=${v.id}" class="continue-card">
+          <img src="${v.thumbnail}" alt="">
+          <div class="continue-card-body">
+            <h3>${v.title}</h3>
+            <p class="video-meta">${v.progress}% complete · ${v.durationFormatted}</p>
+            <div class="progress-track"><span style="width:${v.progress}%"></span></div>
+          </div>
+        </a>`).join('');
+      document.getElementById('carouselTrending').innerHTML = NexusApp.renderCarousel(NexusData.trending, 'Trending');
+      document.getElementById('carouselFavorites').innerHTML = NexusApp.renderCarousel(NexusApp.resolveVideos(NexusApp.getFavorites()), 'Your Favorites');
+      document.getElementById('carouselPlaylists').innerHTML = '<section class="carousel-section reveal"><div class="section-header"><h2 class="section-title">Top Playlists</h2><a href="playlists.html" class="btn btn-sm btn-outline">Manage</a></div><div class="playlist-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">' +
+        NexusData.playlists.slice(0, 8).map(pl => `<a href="playlists.html" class="playlist-card"><div class="playlist-thumb"><img src="${pl.thumbnail}" alt=""><span class="playlist-count">${pl.count} videos</span></div><div class="playlist-body"><h3>${pl.name}</h3></div></a>`).join('') + '</div></section>';
+      document.getElementById('recentGrid').innerHTML = NexusApp.renderVideoGrid(NexusData.videos.slice(0, 24));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlists — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <div class="section-header">
+          <div>
+            <h1 class="page-title">Playlist Management</h1>
+            <p class="page-subtitle">48 curated collections · Create, edit, sort, and auto-play</p>
+          </div>
+          <div style="display:flex;gap:0.5rem">
+            <select id="sortPlaylists" class="form-control" style="width:auto">
+              <option value="recent">Recent</option>
+              <option value="name">Name</option>
+              <option value="count">Video count</option>
+            </select>
+            <button class="btn btn-primary" id="createPlaylist">+ Create Playlist</button>
+          </div>
+        </div>
+        <div class="ai-panel reveal">
+          <h3>✨ Smart Playlist Suggestions</h3>
+          <p style="color:var(--text-secondary)">Based on your watch history: "Sci-Fi Marathon", "Weekend Binge", "Documentary Deep Dive"</p>
+        </div>
+        <div class="playlist-grid" id="playlistGrid"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/playlists.js"></script>
+</body>
+</html>

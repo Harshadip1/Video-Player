@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">Search</h1>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+          <input type="search" id="searchInput" class="form-control" placeholder="Search 320+ videos..." style="flex:1;min-width:200px">
+          <select id="filterGenre" class="form-control" style="width:auto"><option value="">All genres</option></select>
+          <select id="filterSort" class="form-control" style="width:auto">
+            <option value="views">Most viewed</option>
+            <option value="rating">Top rated</option>
+            <option value="newest">Newest</option>
+            <option value="title">A-Z</option>
+          </select>
+        </div>
+        <p id="resultCount" class="page-subtitle"></p>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/search.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sel = document.getElementById('filterGenre');
+      NexusData.genres.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o); });
+      NexusSearch.initSearchPage();
+    });
+  </script>
+</body>
+</html>

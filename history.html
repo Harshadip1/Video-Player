@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch History — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">Watch History</h1>
+        <p class="page-subtitle">120 viewing sessions tracked</p>
+        <div id="historyStats"></div>
+        <h2 class="section-title">Timeline</h2>
+        <div class="timeline" id="historyTimeline"></div>
+        <h2 class="section-title" style="margin-top:2rem">All History</h2>
+        <div id="historyGrid"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('historyStats').innerHTML = NexusApp.renderStats([
+        { value: '127h', label: 'Total Watch Time' },
+        { value: '120', label: 'Sessions' },
+        { value: '47m', label: 'Avg Session' },
+        { value: '18', label: 'Devices' }
+      ]);
+      const hist = NexusData.history.slice(0, 30);
+      document.getElementById('historyTimeline').innerHTML = hist.map(h => {
+        const v = NexusData.getVideo(h.videoId);
+        if (!v) return '';
+        return `<div class="timeline-item glass-card" style="margin-left:0">
+          <strong>${v.title}</strong>
+          <p class="video-meta">${new Date(h.watchedAt).toLocaleDateString()} · ${h.progress}% · ${h.device} · ${h.sessionMinutes} min</p>
+          <a href="player.html?id=${v.id}" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Resume</a>
+        </div>`;
+      }).join('');
+      const videos = hist.map(h => ({ ...NexusData.getVideo(h.videoId), progress: h.progress })).filter(Boolean);
+      document.getElementById('historyGrid').innerHTML = NexusApp.renderVideoGrid(videos);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendations — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">✨ Recommendations</h1>
+        <div class="ai-panel reveal">
+          <h3>🤖 AI Recommendation Engine</h3>
+          <p style="color:var(--text-secondary)">Personalized suggestions based on 127 watched titles, genre preferences, and session patterns.</p>
+        </div>
+        <div id="recCarousel1"></div>
+        <div id="recCarousel2"></div>
+        <h2 class="section-title">Because you watched Sci-Fi</h2>
+        <div id="recGrid"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('recCarousel1').innerHTML = NexusApp.renderCarousel(NexusData.recommendations, 'For You');
+      document.getElementById('recCarousel2').innerHTML = NexusApp.renderCarousel(NexusData.videos.filter(v=>v.genre==='Sci-Fi'), 'Sci-Fi Picks');
+      document.getElementById('recGrid').innerHTML = NexusApp.renderVideoGrid(NexusData.recommendations);
+    });
+  </script>
+</body>
+</html>

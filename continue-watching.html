@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Continue Watching — NexusStream</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <div id="app-root" class="app-layout">
+    <div class="main-content">
+      <div class="page-content">
+        <h1 class="page-title">⏩ Continue Watching</h1>
+        <p class="page-subtitle">Resume where you left off</p>
+        <div id="continueList"></div>
+        <h2 class="section-title" style="margin-top:2rem">More to Continue</h2>
+        <div id="continueGrid"></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cont = NexusData.videos.filter(v => v.progress > 0);
+      document.getElementById('continueList').innerHTML = cont.slice(0, 10).map(v => `
+        <a href="player.html?id=${v.id}" class="continue-card">
+          <img src="${v.thumbnail}" alt="">
+          <div class="continue-card-body">
+            <h3>${v.title}</h3>
+            <p class="video-meta">${v.progress}% · ${v.durationFormatted} remaining</p>
+            <div class="progress-track"><span style="width:${v.progress}%"></span></div>
+            <button class="btn btn-primary btn-sm" style="margin-top:0.75rem;width:fit-content">Resume Playback</button>
+          </div>
+        </a>`).join('');
+      document.getElementById('continueGrid').innerHTML = NexusApp.renderVideoGrid(cont);
+    });
+  </script>
+</body>
+</html>
